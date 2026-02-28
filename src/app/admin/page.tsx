@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
-import { ArrowRight, LogOut, CheckCircle, XCircle, Clock, Video, FileText, Search } from "lucide-react";
+import { ArrowRight, LogOut, CheckCircle, XCircle, Clock, Video, FileText, Search, Download } from "lucide-react";
+import * as XLSX from 'xlsx';
 
 const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
@@ -106,6 +107,43 @@ export default function AdminDashboard() {
         return matchRole && matchCountry && matchStatus && matchSearch;
     });
 
+    const handleExportExcel = () => {
+        if (filteredCandidates.length === 0) return;
+
+        const dataToExport = filteredCandidates.map(c => ({
+            'ID': c.id,
+            'Date de candidature': new Date(c.created_at).toLocaleDateString('fr-FR'),
+            'Prénom': c.first_name,
+            'Nom': c.last_name,
+            'WhatsApp': c.whatsapp,
+            'Email': c.email,
+            'Pays': c.country,
+            'Ville': c.city,
+            'Age': c.age,
+            'Poste souhaité': c.role,
+            'Statut': c.status,
+            // URLS
+            'Pièce Identité URL': c.id_document_url || 'Non fourni',
+            'Vidéo Présentation URL': c.presentation_video_url || 'Non fourni',
+            'Permis Conduire URL': c.drivers_license_url || 'Non fourni',
+            // Reponses Closeur
+            'Expérience Vente': c.sales_experience || '',
+            'Gestion Objection': c.objection_handling || '',
+            'Smartphone & Internet': c.has_smartphone_and_internet || '',
+            // Reponses Livreur
+            'Moto Personnel': c.has_motorbike || '',
+            'Disponibilité Immédiate': c.immediate_availability || '',
+            'Expérience Livraison': c.delivery_experience || '',
+            'Gestion Client Refus': c.client_refusal_handling || '',
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Candidatures");
+
+        XLSX.writeFile(workbook, `Candidatures_${new Date().toISOString().split('T')[0]}.xlsx`);
+    };
+
     if (!isAuthenticated) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 p-6">
@@ -147,6 +185,9 @@ export default function AdminDashboard() {
                     <p className="text-zinc-500 mt-1">Gérez vos candidatures Closeurs & Livreurs</p>
                 </div>
                 <div className="mt-4 md:mt-0 flex gap-4">
+                    <button onClick={handleExportExcel} disabled={filteredCandidates.length === 0} className="text-sm font-medium px-4 py-2 bg-black text-white dark:bg-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors flex items-center disabled:opacity-50">
+                        <Download className="w-4 h-4 mr-2" /> Exporter Excel
+                    </button>
                     <button onClick={fetchCandidates} className="text-sm font-medium px-4 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
                         Actualiser
                     </button>
@@ -208,16 +249,16 @@ export default function AdminDashboard() {
                                     key={candidate.id}
                                     onClick={() => setSelectedCandidate(candidate)}
                                     className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedCandidate?.id === candidate.id
-                                            ? "border-black dark:border-white bg-black/5 dark:bg-white/10"
-                                            : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-400 dark:hover:border-zinc-600"
+                                        ? "border-black dark:border-white bg-black/5 dark:bg-white/10"
+                                        : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-zinc-400 dark:hover:border-zinc-600"
                                         }`}
                                 >
                                     <div className="flex justify-between items-start mb-2">
                                         <h3 className="font-semibold text-sm truncate pr-2">{candidate.first_name} {candidate.last_name}</h3>
                                         <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${candidate.status === 'En attente' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-500' :
-                                                candidate.status === 'Refusé' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-500' :
-                                                    candidate.status === 'Test' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500' :
-                                                        'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500'
+                                            candidate.status === 'Refusé' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-500' :
+                                                candidate.status === 'Test' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-500' :
+                                                    'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500'
                                             }`}>
                                             {candidate.status}
                                         </span>
