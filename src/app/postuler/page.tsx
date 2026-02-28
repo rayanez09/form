@@ -16,7 +16,7 @@ const formSchema = z.object({
     lastName: z.string().min(2, "Le nom est requis"),
     whatsapp: z.string().min(8, "Numéro WhatsApp invalide"),
     email: z.string().email("Email invalide"),
-    country: z.enum(["Centrafrique", "Gabon"]),
+    country: z.enum(["Centrafrique", "Gabon", "Tchad", "Guinée Conakry", "RDC", "Burundi", "Mauritanie"]),
     city: z.string().min(2, "La ville est requise"),
     age: z.string().min(2, "L'âge est requis"),
     idDocument: z.any().optional(), // File handle later
@@ -357,6 +357,11 @@ export default function PostulerPage() {
                                     <select {...form.register("country")} className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 appearance-none">
                                         <option value="Centrafrique">République Centrafricaine</option>
                                         <option value="Gabon">Gabon</option>
+                                        <option value="Tchad">Tchad</option>
+                                        <option value="Guinée Conakry">Guinée Conakry</option>
+                                        <option value="RDC">République Démocratique du Congo (RDC)</option>
+                                        <option value="Burundi">Burundi</option>
+                                        <option value="Mauritanie">Mauritanie</option>
                                     </select>
                                 </div>
                                 <div className="space-y-1.5">

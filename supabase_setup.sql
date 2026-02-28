@@ -8,7 +8,7 @@ CREATE TABLE candidates (
   last_name text NOT NULL,
   whatsapp text NOT NULL,
   email text NOT NULL,
-  country text check (country in ('Centrafrique', 'Gabon')) NOT NULL,
+  country text check (country in ('Centrafrique', 'Gabon', 'Tchad', 'Guinée Conakry', 'RDC', 'Burundi', 'Mauritanie')) NOT NULL,
   city text NOT NULL,
   age integer NOT NULL,
   id_document_url text,
