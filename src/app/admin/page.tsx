@@ -135,8 +135,9 @@ export default function AdminDashboard() {
             'Permis Conduire URL': c.drivers_license_url || 'Non fourni',
             // Reponses Closeur
             'Expérience Vente': c.sales_experience || '',
-            'Gestion Objection': c.objection_handling || '',
-            'Smartphone & Internet': c.has_smartphone_and_internet || '',
+            'Gestion Objection (Je vais réfléchir)': c.objection_handling || '',
+            'Téléphone & Internet': c.has_smartphone_and_internet || '',
+            'Ordinateur (PC/Mac)': c.has_pc || '',
             // Reponses Livreur
             'Moto Personnel': c.has_motorbike || '',
             'Disponibilité Immédiate': c.immediate_availability || '',
@@ -358,8 +359,12 @@ export default function AdminDashboard() {
                                             </div>
                                             <div className="flex gap-4">
                                                 <div className="px-3 py-2 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 text-sm">
-                                                    <span className="text-zinc-500 mr-2">Smartphone/Net:</span>
+                                                    <span className="text-zinc-500 mr-2">Téléphone/Net:</span>
                                                     <span className="font-semibold">{selectedCandidate.has_smartphone_and_internet}</span>
+                                                </div>
+                                                <div className="px-3 py-2 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 text-sm">
+                                                    <span className="text-zinc-500 mr-2">PC/Mac:</span>
+                                                    <span className="font-semibold">{selectedCandidate.has_pc || "Non renseigné"}</span>
                                                 </div>
                                             </div>
                                         </>

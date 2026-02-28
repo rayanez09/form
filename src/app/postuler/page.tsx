@@ -30,6 +30,7 @@ const formSchema = z.object({
     salesPerDay: z.string().optional(),
     objectionHandling: z.string().optional(),
     hasSmartphoneAndInternet: z.enum(["Oui", "Non"]).optional(),
+    hasPc: z.enum(["Oui", "Non"]).optional(),
     availability: z.string().optional(),
     presentationVideo: z.any().optional(), // File
 
@@ -62,6 +63,7 @@ export default function PostulerPage() {
             role: "Closeur",
             country: "Centrafrique",
             hasSmartphoneAndInternet: "Oui",
+            hasPc: "Oui",
             hasMotorbike: "Oui",
             immediateAvailability: "Oui"
         },
@@ -197,6 +199,7 @@ export default function PostulerPage() {
                     sales_per_day: data.salesPerDay,
                     objection_handling: data.objectionHandling,
                     has_smartphone_and_internet: data.hasSmartphoneAndInternet,
+                    has_pc: data.hasPc,
                     availability: data.availability,
                     presentation_video_url: presentationVideoUrl,
 
@@ -433,15 +436,22 @@ export default function PostulerPage() {
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-sm font-semibold text-foreground/80">Objection : "Je vais réfléchir" - Comment répondez-vous ?</label>
+                                        <label className="text-sm font-semibold text-foreground/80">Si un client vous dit "Je vais réfléchir", comment répondez-vous exactement ?</label>
                                         <textarea {...form.register("objectionHandling")} className="w-full min-h-[100px] p-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 resize-none" placeholder="Quelle est votre approche ?" />
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-1.5">
-                                            <label className="text-sm font-semibold text-foreground/80">Smartphone + Internet Stable</label>
+                                            <label className="text-sm font-semibold text-foreground/80">Disposez-vous d'un téléphone et d'une connexion internet stable ?</label>
                                             <select {...form.register("hasSmartphoneAndInternet")} className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 appearance-none">
                                                 <option value="Oui">Oui, je suis équipé</option>
+                                                <option value="Non">Non</option>
+                                            </select>
+                                        </div>
+                                        <div className="space-y-1.5">
+                                            <label className="text-sm font-semibold text-foreground/80">Disposez-vous d'un ordinateur (PC/Mac) ?</label>
+                                            <select {...form.register("hasPc")} className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 appearance-none">
+                                                <option value="Oui">Oui</option>
                                                 <option value="Non">Non</option>
                                             </select>
                                         </div>

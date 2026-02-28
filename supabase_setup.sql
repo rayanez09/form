@@ -22,6 +22,7 @@ CREATE TABLE candidates (
   sales_per_day text,
   objection_handling text,
   has_smartphone_and_internet text,
+  has_pc text,
   availability text,
   presentation_video_url text,
   
