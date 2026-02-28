@@ -3,14 +3,23 @@ import { ArrowRight, Briefcase, MapPin, TrendingUp, ShieldCheck } from "lucide-r
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      {/* Navigation (Minimalist) */}
-      <nav className="w-full border-b border-foreground/10 px-6 py-4 flex justify-between items-center">
-        <div className="font-bold text-xl tracking-tight">Recrutement.</div>
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-foreground flex flex-col font-sans relative overflow-hidden">
+      {/* Dynamic Background */}
+      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-foreground/[0.03] blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 right-[-5%] w-[600px] h-[600px] rounded-full bg-foreground/[0.02] blur-[120px] pointer-events-none" />
+
+      {/* Navigation */}
+      <nav className="w-full px-6 py-6 flex justify-between items-center relative z-10 max-w-7xl mx-auto">
+        <div className="font-black text-2xl tracking-tighter flex items-center gap-2">
+          <div className="w-8 h-8 bg-foreground rounded-lg flex items-center justify-center">
+            <span className="text-background text-lg leading-none">R</span>
+          </div>
+          Recrutement.
+        </div>
         <div>
           <Link
             href="/postuler"
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-semibold hover:text-foreground/70 transition-colors px-4 py-2"
           >
             Déposer une candidature
           </Link>
@@ -18,77 +27,88 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-grow flex flex-col items-center justify-center px-6 py-24 text-center">
-        <div className="max-w-3xl space-y-8">
-          <div className="inline-flex items-center rounded-full border border-foreground/20 px-3 py-1 text-sm font-medium">
-            <span className="flex h-2 w-2 rounded-full bg-foreground mr-2"></span>
-            Postes ouverts en République Centrafricaine & Gabon
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-32 text-center relative z-10">
+        <div className="max-w-4xl space-y-10 animate-in slide-in-from-bottom-8 duration-700 fade-in">
+          <div className="inline-flex items-center rounded-full border border-foreground/10 bg-white/50 dark:bg-black/50 backdrop-blur-sm px-4 py-1.5 text-sm font-medium shadow-sm">
+            <span className="relative flex h-2 w-2 mr-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            Postes ouverts : <span className="font-bold ml-1">RCA & Gabon</span>
           </div>
-          
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-tight">
-            Accélérez votre <br /> carrière avec nous.
+
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[1.1]">
+            L'excellence <br className="hidden md:block" /> n'attend pas.
           </h1>
-          
-          <p className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto">
-            Nous recherchons des <span className="text-foreground font-semibold">Closeurs</span> performants et des <span className="text-foreground font-semibold">Livreurs</span> fiables pour accompagner notre forte croissance.
+
+          <p className="text-xl md:text-2xl text-foreground/60 max-w-2xl mx-auto font-medium leading-relaxed">
+            Nous recrutons l'élite des <span className="text-foreground font-bold">Closeurs</span> et des <span className="text-foreground font-bold">Livreurs</span> pour accompagner notre croissance exponentielle.
           </p>
-          
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/postuler"
-              className="inline-flex h-12 items-center justify-center rounded-md bg-foreground text-background px-8 text-sm font-medium transition-transform hover:scale-105"
+              className="inline-flex h-14 items-center justify-center rounded-xl bg-foreground text-background px-8 text-base font-bold transition-all hover:scale-105 hover:shadow-2xl shadow-xl"
             >
               Postuler maintenant
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="#avantages"
-              className="inline-flex h-12 items-center justify-center rounded-md border border-foreground bg-transparent px-8 text-sm font-medium transition-colors hover:bg-foreground/5"
+              className="inline-flex h-14 items-center justify-center rounded-xl border-2 border-foreground/10 bg-white/50 dark:bg-black/50 backdrop-blur-md px-8 text-base font-bold transition-all hover:bg-foreground/5"
             >
-              Découvrir les avantages
+              Découvrir le cadre
             </Link>
           </div>
         </div>
       </main>
 
       {/* Advantages Section */}
-      <section id="avantages" className="w-full bg-foreground/5 py-24 px-6 border-t border-foreground/10">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight">Pourquoi nous rejoindre ?</h2>
-            <p className="text-foreground/60 mt-4">Des conditions claires, structurées et exigeantes.</p>
+      <section id="avantages" className="w-full py-32 px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20 animate-in fade-in duration-1000">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">Pourquoi nous rejoindre ?</h2>
+            <p className="text-xl text-foreground/60 max-w-2xl mx-auto">Un cadre exigeant conçu pour la performance et la rentabilité.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-background border border-foreground/10 p-6 rounded-lg shadow-sm">
-              <TrendingUp className="h-8 w-8 mb-4 opacity-80" />
-              <h3 className="font-semibold text-lg mb-2">Rémunération attractive</h3>
-              <p className="text-sm text-foreground/60 leading-relaxed">
-                Système de commissions motivant pour les Closeurs et revenus stables pour les Livreurs.
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow group">
+              <div className="w-12 h-12 bg-foreground/5 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-foreground/10 transition-all">
+                <TrendingUp className="h-6 w-6 text-foreground" />
+              </div>
+              <h3 className="font-bold text-xl mb-3">Rémunération</h3>
+              <p className="text-foreground/60 leading-relaxed font-medium">
+                Système de commissions no-limit pour les Closeurs et revenus stables et garantis pour les Livreurs.
               </p>
             </div>
-            
-            <div className="bg-background border border-foreground/10 p-6 rounded-lg shadow-sm">
-              <Briefcase className="h-8 w-8 mb-4 opacity-80" />
-              <h3 className="font-semibold text-lg mb-2">Cadre structuré</h3>
-              <p className="text-sm text-foreground/60 leading-relaxed">
-                Des processus de travail clairs et des outils modernes (CRM, automatisation) à votre disposition.
+
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow group">
+              <div className="w-12 h-12 bg-foreground/5 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-foreground/10 transition-all">
+                <Briefcase className="h-6 w-6 text-foreground" />
+              </div>
+              <h3 className="font-bold text-xl mb-3">Cadre structuré</h3>
+              <p className="text-foreground/60 leading-relaxed font-medium">
+                Outils de pointe (CRM, automatisation) et process clairs pour vous concentrer sur l'essentiel.
               </p>
             </div>
-            
-            <div className="bg-background border border-foreground/10 p-6 rounded-lg shadow-sm">
-              <MapPin className="h-8 w-8 mb-4 opacity-80" />
-              <h3 className="font-semibold text-lg mb-2">Flexibilité</h3>
-              <p className="text-sm text-foreground/60 leading-relaxed">
-                Possibilité de travail à distance (pour les sales) et autonomie sur le terrain.
+
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow group">
+              <div className="w-12 h-12 bg-foreground/5 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-foreground/10 transition-all">
+                <MapPin className="h-6 w-6 text-foreground" />
+              </div>
+              <h3 className="font-bold text-xl mb-3">Flexibilité</h3>
+              <p className="text-foreground/60 leading-relaxed font-medium">
+                100% télétravail possible pour l'équipe Sales, autonomie totale sur le terrain pour la livraison.
               </p>
             </div>
-            
-            <div className="bg-background border border-foreground/10 p-6 rounded-lg shadow-sm">
-              <ShieldCheck className="h-8 w-8 mb-4 opacity-80" />
-              <h3 className="font-semibold text-lg mb-2">Sérieux exigé</h3>
-              <p className="text-sm text-foreground/60 leading-relaxed">
-                Nous filtrons rigoureusement nos candidats pour ne travailler qu'avec les meilleurs.
+
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow group">
+              <div className="w-12 h-12 bg-foreground/5 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-foreground/10 transition-all">
+                <ShieldCheck className="h-6 w-6 text-foreground" />
+              </div>
+              <h3 className="font-bold text-xl mb-3">Exigence</h3>
+              <p className="text-foreground/60 leading-relaxed font-medium">
+                Nous ne recrutons que des profils sérieux. Un filtrage drastique pour une équipe d'élite.
               </p>
             </div>
           </div>
@@ -96,9 +116,10 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="w-full border-t border-foreground/10 py-8 px-6 text-center">
-        <p className="text-sm text-foreground/50">
-          © {new Date().getFullYear()} Plateforme de Recrutement. Design Minimaliste.
+      <footer className="w-full border-t border-zinc-200 dark:border-zinc-800 py-12 px-6 text-center relative z-10 bg-white dark:bg-zinc-950">
+        <div className="font-black text-xl tracking-tighter mb-4 opacity-50">Recrutement.</div>
+        <p className="text-sm font-medium text-foreground/40">
+          © {new Date().getFullYear()} Tous droits réservés.
         </p>
       </footer>
     </div>
