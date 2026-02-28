@@ -5,7 +5,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 // --- VALIDATION SCHEMA ---
 const formSchema = z.object({
@@ -45,6 +46,8 @@ type FormValues = z.infer<typeof formSchema>;
 export default function PostulerPage() {
     const [step, setStep] = useState(1);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -66,10 +69,74 @@ export default function PostulerPage() {
     const role = form.watch("role");
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        // For now, prevent default and transition to success map
-        console.log("Form Submitted:", data);
-        // TODO: Send data to Supabase and trigger Resend email
-        setIsSubmitted(true);
+        setIsSubmitting(true);
+        setErrorMsg(null);
+        try {
+            const uploadFile = async (fileList: any, bucket: string) => {
+                if (!fileList || fileList.length === 0) return null;
+                const file = fileList[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                const { error: uploadError } = await supabase.storage.from(bucket).upload(filePath, file);
+
+                if (uploadError) {
+                    throw new Error(`Upload failed: ${uploadError.message}`);
+                }
+
+                const { data: publicUrlData } = supabase.storage.from(bucket).getPublicUrl(filePath);
+                return publicUrlData.publicUrl;
+            };
+
+            const idDocumentUrl = await uploadFile(data.idDocument, 'documents');
+            const presentationVideoUrl = await uploadFile(data.presentationVideo, 'videos');
+            const driversLicenseUrl = await uploadFile(data.driversLicense, 'documents');
+
+            const { error } = await supabase.from('candidates').insert([
+                {
+                    first_name: data.firstName,
+                    last_name: data.lastName,
+                    whatsapp: data.whatsapp,
+                    email: data.email,
+                    country: data.country,
+                    city: data.city,
+                    age: parseInt(data.age),
+                    id_document_url: idDocumentUrl,
+
+                    role: data.role,
+
+                    sales_experience: data.salesExperience,
+                    product_types: data.productTypes,
+                    sales_per_day: data.salesPerDay,
+                    objection_handling: data.objectionHandling,
+                    has_smartphone_and_internet: data.hasSmartphoneAndInternet,
+                    availability: data.availability,
+                    presentation_video_url: presentationVideoUrl,
+
+                    has_motorbike: data.hasMotorbike,
+                    drivers_license_url: driversLicenseUrl,
+                    delivery_experience: data.deliveryExperience,
+                    immediate_availability: data.immediateAvailability,
+                    client_refusal_handling: data.clientRefusalHandling,
+                    coverage_zone: data.coverageZone,
+                }
+            ]);
+
+            if (error) {
+                console.error("Supabase insert error:", error);
+                setErrorMsg("Une erreur est survenue lors de l'envoi de votre candidature.");
+                setIsSubmitting(false);
+                return;
+            }
+
+            setIsSubmitted(true);
+        } catch (err) {
+            console.error(err);
+            setErrorMsg("Erreur inattendue.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const nextStep = async () => {
@@ -123,6 +190,12 @@ export default function PostulerPage() {
                     {step === 2 && "Poste souhaité"}
                     {step === 3 && "Détails de la candidature"}
                 </h1>
+
+                {errorMsg && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-md text-sm">
+                        {errorMsg}
+                    </div>
+                )}
 
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     {/* STEP 1: PERSONAL INFO */}
@@ -296,9 +369,17 @@ export default function PostulerPage() {
                         ) : (
                             <button
                                 type="submit"
-                                className="px-6 py-2 rounded-md bg-foreground text-background font-medium hover:opacity-90 transition-opacity"
+                                disabled={isSubmitting}
+                                className="px-6 py-2 rounded-md bg-foreground text-background font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center"
                             >
-                                Soumettre ma candidature
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Envoi en cours...
+                                    </>
+                                ) : (
+                                    "Soumettre ma candidature"
+                                )}
                             </button>
                         )}
                     </div>
