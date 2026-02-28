@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, supabaseAdmin } from "@/lib/supabase";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { ArrowRight, LogOut, CheckCircle, XCircle, Clock, Video, FileText, Search, Download } from "lucide-react";
 import * as XLSX from 'xlsx';
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
 
     const fetchCandidates = async () => {
         setLoading(true);
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from("candidates")
             .select("*")
             .order("created_at", { ascending: false });
@@ -83,7 +83,7 @@ export default function AdminDashboard() {
     };
 
     const updateStatus = async (id: string, newStatus: string) => {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from("candidates")
             .update({ status: newStatus })
             .eq("id", id);
