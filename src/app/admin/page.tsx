@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase, supabaseAdmin } from "@/lib/supabase";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { ArrowRight, LogOut, CheckCircle, XCircle, Clock, Video, FileText, Search, Download } from "lucide-react";
 import * as XLSX from 'xlsx';
@@ -69,30 +68,38 @@ export default function AdminDashboard() {
 
     const fetchCandidates = async () => {
         setLoading(true);
-        const { data, error } = await supabaseAdmin
-            .from("candidates")
-            .select("*")
-            .order("created_at", { ascending: false });
-
-        if (error) {
+        try {
+            const res = await fetch('/api/admin/candidates');
+            if (res.ok) {
+                const data = await res.json();
+                setCandidates(data.candidates || []);
+            } else {
+                console.error("Erreur de récupération HTTP", res.status);
+            }
+        } catch (error) {
             console.error("Erreur de récupération :", error);
-        } else {
-            setCandidates(data || []);
         }
         setLoading(false);
     };
 
     const updateStatus = async (id: string, newStatus: string) => {
-        const { error } = await supabaseAdmin
-            .from("candidates")
-            .update({ status: newStatus })
-            .eq("id", id);
+        try {
+            const res = await fetch('/api/admin/update-status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, status: newStatus })
+            });
 
-        if (!error) {
-            setCandidates(candidates.map(c => c.id === id ? { ...c, status: newStatus } : c));
-            if (selectedCandidate && selectedCandidate.id === id) {
-                setSelectedCandidate({ ...selectedCandidate, status: newStatus });
+            if (res.ok) {
+                setCandidates(candidates.map(c => c.id === id ? { ...c, status: newStatus } : c));
+                if (selectedCandidate && selectedCandidate.id === id) {
+                    setSelectedCandidate({ ...selectedCandidate, status: newStatus });
+                }
+            } else {
+                console.error("Erreur mise à jour statut", res.status);
             }
+        } catch (err) {
+            console.error("Erreur mise à jour statut", err);
         }
     };
 
