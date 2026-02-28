@@ -406,12 +406,12 @@ export default function PostulerPage() {
                                             className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30"
                                         />
                                         {isCountryDropdownOpen && (
-                                            <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-900 border border-foreground/10 rounded-xl shadow-xl max-h-60 overflow-auto">
+                                            <div className="absolute z-50 w-full mt-1 bg-white border border-foreground/10 rounded-xl shadow-xl max-h-60 overflow-auto">
                                                 {filteredCountries.length > 0 ? (
                                                     filteredCountries.map(c => (
                                                         <div
                                                             key={c}
-                                                            className="px-4 py-2.5 cursor-pointer hover:bg-foreground/5 dark:hover:bg-foreground/10 text-sm font-medium transition-colors"
+                                                            className="px-4 py-2.5 cursor-pointer hover:bg-foreground/5 text-sm font-medium transition-colors"
                                                             onClick={() => {
                                                                 form.setValue("country", c);
                                                                 form.clearErrors("country");
