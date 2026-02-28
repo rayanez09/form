@@ -3,23 +3,36 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --radius-xl: 12px;
+  --radius-lg: 8px;
 }
 
 :root {
   --background: #ffffff;
-  --foreground: #0f172a;
-  /* Slate 900 */
+  --foreground: #1e293b;
+  /* Slate 800 - Texte Principal */
+  --primary: #0f172a;
+  /* Bleu Deep Corporate */
+  --secondary: #2563eb;
+  /* Indigo Moderne */
+  --success: #16a34a;
+  /* Vert Validation */
+  --destructive: #dc2626;
+  /* Rouge Erreur */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Forcing light theme even in dark mode for now, or just very soft dark */
+    /* Forcing light theme even in dark mode initially to ensure corporate look */
     --background: #f8fafc;
-    /* Slate 50 */
-    --foreground: #0f172a;
-    /* Slate 900 */
+    --foreground: #1e293b;
+    --primary: #0f172a;
+    --secondary: #2563eb;
   }
 }
 

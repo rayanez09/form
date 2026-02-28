@@ -247,20 +247,20 @@ export default function PostulerPage() {
 
     if (isSubmitted) {
         return (
-            <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-6 relative overflow-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-foreground/[0.03] rounded-full blur-3xl pointer-events-none" />
+            <div className="min-h-screen bg-white text-slate-800 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-success/[0.03] rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col items-center text-center animate-in zoom-in-95 duration-500">
-                    <div className="w-20 h-20 bg-foreground/5 rounded-full flex items-center justify-center mb-8">
-                        <CheckCircle2 className="h-10 w-10 text-foreground" />
+                    <div className="w-20 h-20 bg-success/10 rounded-full flex items-center justify-center mb-8">
+                        <CheckCircle2 className="h-10 w-10 text-success" />
                     </div>
-                    <h1 className="text-4xl font-black tracking-tight mb-4">Candidature transmise</h1>
-                    <p className="text-foreground/70 mb-10 text-lg max-w-md">
+                    <h1 className="text-4xl font-black tracking-tight mb-4 text-primary">Candidature transmise</h1>
+                    <p className="text-slate-600 mb-10 text-lg max-w-md">
                         Merci pour votre intérêt. Notre équipe va examiner votre profil avec la plus grande attention.
                     </p>
                     <Link
                         href="/"
-                        className="inline-flex h-12 px-8 items-center justify-center rounded-lg bg-foreground text-background font-semibold hover:scale-105 transition-all shadow-xl hover:shadow-2xl"
+                        className="inline-flex h-12 px-8 items-center justify-center rounded-lg bg-secondary text-white font-bold uppercase tracking-wide hover:bg-primary transition-all shadow-md hover:shadow-lg"
                     >
                         Retour à l'accueil
                     </Link>
@@ -270,27 +270,27 @@ export default function PostulerPage() {
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-foreground flex flex-col items-center py-12 px-4 sm:px-6 relative overflow-hidden font-sans">
+        <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center py-12 px-4 sm:px-6 relative overflow-hidden font-sans">
             {/* Background design elements */}
-            <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-black/5 dark:from-white/5 to-transparent pointer-events-none" />
-            <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-foreground/[0.02] blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+            <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/[0.02] blur-[100px] pointer-events-none" />
 
             <div className="w-full max-w-3xl mb-8 flex justify-between items-center relative z-10">
-                <Link href="/" className="inline-flex items-center text-sm font-semibold text-foreground/60 hover:text-foreground transition-colors py-2 px-4 rounded-full hover:bg-foreground/5 -ml-4">
+                <Link href="/" className="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-primary transition-colors py-2 px-4 rounded-full hover:bg-primary/5 -ml-4">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Retour
                 </Link>
                 <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold uppercase tracking-widest text-foreground/40 hidden sm:inline-block">Progression</span>
-                    <div className="flex gap-1.5 items-center bg-foreground/5 px-3 py-1.5 rounded-full">
+                    <span className="text-xs font-bold uppercase tracking-widest text-slate-400 hidden sm:inline-block">Progression</span>
+                    <div className="flex gap-1.5 items-center bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
                         {[1, 2, 3].map((s) => (
-                            <div key={s} className={`w-2 h-2 rounded-full transition-all duration-300 ${step === s ? "bg-foreground scale-125" : step > s ? "bg-foreground/40" : "bg-foreground/10"}`} />
+                            <div key={s} className={`w-2 h-2 rounded-full transition-all duration-300 ${step === s ? "bg-secondary scale-125" : step > s ? "bg-secondary/40" : "bg-slate-200"}`} />
                         ))}
                     </div>
                 </div>
             </div>
 
-            <div className="w-full max-w-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-8 sm:p-12 rounded-2xl shadow-xl relative z-10 animate-in slide-in-from-bottom-8 duration-700 fade-in">
+            <div className="w-full max-w-3xl bg-white border border-slate-200 p-8 sm:p-12 rounded-2xl shadow-xl relative z-10 animate-in slide-in-from-bottom-8 duration-700 fade-in">
                 <div className="mb-10">
                     <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-3">
                         {step === 1 && "Commençons par vous."}
@@ -585,7 +585,7 @@ export default function PostulerPage() {
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="px-8 py-3 rounded-lg bg-foreground text-background font-semibold hover:scale-[1.02] hover:shadow-lg transition-all"
+                                className="px-8 py-3 rounded-lg bg-secondary text-white font-bold uppercase tracking-wide hover:bg-primary hover:shadow-lg transition-all"
                             >
                                 Continuer vers l'étape {step + 1}
                             </button>
@@ -593,7 +593,7 @@ export default function PostulerPage() {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="px-8 py-3 rounded-lg bg-foreground text-background font-semibold hover:scale-[1.02] hover:shadow-lg transition-all disabled:opacity-50 disabled:hover:scale-100 flex items-center"
+                                className="px-8 py-3 rounded-lg bg-secondary text-white font-bold uppercase tracking-wide hover:bg-primary hover:shadow-lg transition-all disabled:opacity-50 disabled:hover:scale-100 flex items-center"
                             >
                                 {isSubmitting ? (
                                     <>
