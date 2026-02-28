@@ -130,6 +130,17 @@ export default function PostulerPage() {
                 return;
             }
 
+            // Trigger email confirmation
+            fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    firstName: data.firstName,
+                    email: data.email,
+                    role: data.role
+                })
+            }).catch(console.error);
+
             setIsSubmitted(true);
         } catch (err) {
             console.error(err);
