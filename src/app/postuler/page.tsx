@@ -125,10 +125,6 @@ export default function PostulerPage() {
         setErrorMsg(null);
 
         // Manual Validation (Conditional)
-        if (!data.idDocument || data.idDocument.length === 0) {
-            setErrorMsg("La pièce d'identité est obligatoire.");
-            setIsSubmitting(false); return;
-        }
 
         if (role === "Closeur" || role === "Les deux") {
             if (!data.salesExperience || data.salesExperience.length < 5) {
@@ -152,10 +148,6 @@ export default function PostulerPage() {
             }
             if (!data.clientRefusalHandling || data.clientRefusalHandling.length < 5) {
                 setErrorMsg("Livreur : La gestion d'un client est obligatoire.");
-                setIsSubmitting(false); return;
-            }
-            if (!data.driversLicense || data.driversLicense.length === 0) {
-                setErrorMsg("Livreur : Le permis de conduire est obligatoire.");
                 setIsSubmitting(false); return;
             }
         }
@@ -374,7 +366,7 @@ export default function PostulerPage() {
                             </div>
 
                             <div className="space-y-1.5 pt-2">
-                                <label className="text-sm font-semibold text-foreground/80 block mb-2">Pièce d'identité <span className="text-xs text-foreground/50 font-normal ml-2">(Passeport, CNI, etc.)</span></label>
+                                <label className="text-sm font-semibold text-foreground/80 block mb-2">Pièce d'identité <span className="text-xs text-blue-500 font-medium ml-2 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">(Optionnel, mais valorise la candidature)</span></label>
                                 <div className="relative border-2 border-dashed border-foreground/15 rounded-xl p-6 hover:bg-foreground/[0.02] transition-colors group cursor-pointer text-center">
                                     <input type="file" {...form.register("idDocument")} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                                     <div className="flex flex-col items-center gap-2">
@@ -569,26 +561,6 @@ export default function PostulerPage() {
                                     <div className="space-y-1.5">
                                         <label className="text-sm font-semibold text-foreground/80">Un client refuse de payer à la livraison. Que faites-vous ?</label>
                                         <textarea {...form.register("clientRefusalHandling")} className="w-full min-h-[100px] p-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 resize-none" placeholder="Quelle est votre réaction ?" />
-                                    </div>
-
-                                    <div className="space-y-1.5 pt-2">
-                                        <label className="text-sm font-semibold text-foreground/80 block mb-2">Permis de conduire <span className="text-xs text-foreground/50 font-normal ml-2">Upload</span></label>
-                                        <div className="relative border-2 border-dashed border-foreground/15 rounded-xl p-6 hover:bg-foreground/[0.02] transition-colors group cursor-pointer text-center">
-                                            <input type="file" {...form.register("driversLicense")} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
-                                            <div className="flex flex-col items-center gap-2">
-                                                <div className="w-10 h-10 rounded-full bg-foreground/[0.04] flex items-center justify-center group-hover:bg-foreground/[0.08] transition-colors">
-                                                    <svg className="w-5 h-5 text-foreground/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                                                </div>
-                                                <p className="text-sm font-medium text-foreground/80">
-                                                    {licenseFile && licenseFile.length > 0 ? (
-                                                        <span className="text-green-600 font-bold">{licenseFile[0].name}</span>
-                                                    ) : (
-                                                        "Cliquez pour importer votre permis *"
-                                                    )}
-                                                </p>
-                                                <p className="text-xs text-foreground/40">PNG, JPG, PDF (Max 5MB)</p>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             )}
