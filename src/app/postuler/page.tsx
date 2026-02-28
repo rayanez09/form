@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,20 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
+// --- DATA ---
+const africanCountries = [
+    "Afrique du Sud", "Algérie", "Angola", "Bénin", "Botswana", "Burkina Faso",
+    "Burundi", "Cameroun", "Cap-Vert", "République Centrafricaine", "Comores",
+    "République Démocratique du Congo (RDC)", "République du Congo", "Côte d'Ivoire",
+    "Djibouti", "Égypte", "Érythrée", "Eswatini", "Éthiopie", "Gabon", "Gambie",
+    "Ghana", "Guinée", "Guinée-Bissau", "Guinée équatoriale", "Kenya", "Lesotho",
+    "Libéria", "Libye", "Madagascar", "Malawi", "Mali", "Maroc", "Maurice",
+    "Mauritanie", "Mozambique", "Namibie", "Niger", "Nigéria", "Ouganda",
+    "Rwanda", "Sao Tomé-et-Principe", "Sénégal", "Seychelles", "Sierra Leone",
+    "Somalie", "Soudan", "Soudan du Sud", "Tanzanie", "Tchad", "Togo",
+    "Tunisie", "Zambie", "Zimbabwe"
+];
+
 // --- VALIDATION SCHEMA ---
 const formSchema = z.object({
     // Section 1
@@ -16,7 +30,7 @@ const formSchema = z.object({
     lastName: z.string().min(2, "Le nom est requis"),
     whatsapp: z.string().min(8, "Numéro WhatsApp invalide"),
     email: z.string().email("Email invalide"),
-    country: z.enum(["Centrafrique", "Gabon", "Tchad", "Guinée Conakry", "RDC", "Burundi", "Mauritanie"]),
+    country: z.string().min(2, "Le pays est requis"),
     city: z.string().min(2, "La ville est requise"),
     age: z.string().min(2, "L'âge est requis"),
     idDocument: z.any().optional(), // File handle later
@@ -61,7 +75,7 @@ export default function PostulerPage() {
             city: "",
             age: "18",
             role: "Closeur",
-            country: "Centrafrique",
+            country: "",
             hasSmartphoneAndInternet: "Oui",
             hasPc: "Oui",
             hasMotorbike: "Oui",
@@ -74,6 +88,27 @@ export default function PostulerPage() {
     const [capturing, setCapturing] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState<BlobPart[]>([]);
     const [isRecordingMode, setIsRecordingMode] = useState(false);
+
+    // Dynamic Country Search State
+    const [countrySearch, setCountrySearch] = useState("");
+    const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+    const countryDropdownRef = useRef<HTMLDivElement>(null);
+
+    const selectedCountry = form.watch("country");
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target as Node)) {
+                setIsCountryDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const filteredCountries = africanCountries.filter(c =>
+        c.toLowerCase().includes(countrySearch.toLowerCase())
+    );
 
     const handleDataAvailable = useCallback(
         ({ data }: BlobEvent) => {
@@ -352,17 +387,48 @@ export default function PostulerPage() {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-1.5">
+                                <div className="space-y-1.5" ref={countryDropdownRef}>
                                     <label className="text-sm font-semibold text-foreground/80">Pays de Résidence</label>
-                                    <select {...form.register("country")} className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30 appearance-none">
-                                        <option value="Centrafrique">République Centrafricaine</option>
-                                        <option value="Gabon">Gabon</option>
-                                        <option value="Tchad">Tchad</option>
-                                        <option value="Guinée Conakry">Guinée Conakry</option>
-                                        <option value="RDC">République Démocratique du Congo (RDC)</option>
-                                        <option value="Burundi">Burundi</option>
-                                        <option value="Mauritanie">Mauritanie</option>
-                                    </select>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            placeholder="Rechercher votre pays..."
+                                            value={isCountryDropdownOpen ? countrySearch : (selectedCountry || "")}
+                                            onChange={(e) => {
+                                                setCountrySearch(e.target.value);
+                                                setIsCountryDropdownOpen(true);
+                                                if (selectedCountry) form.setValue("country", "");
+                                            }}
+                                            onFocus={() => {
+                                                setIsCountryDropdownOpen(true);
+                                                setCountrySearch("");
+                                            }}
+                                            className="w-full h-11 px-4 rounded-lg border border-foreground/10 bg-foreground/[0.02] focus:bg-background transition-all focus:outline-none focus:ring-2 focus:ring-foreground/20 focus:border-foreground/30"
+                                        />
+                                        {isCountryDropdownOpen && (
+                                            <div className="absolute z-50 w-full mt-1 bg-white dark:bg-zinc-900 border border-foreground/10 rounded-xl shadow-xl max-h-60 overflow-auto">
+                                                {filteredCountries.length > 0 ? (
+                                                    filteredCountries.map(c => (
+                                                        <div
+                                                            key={c}
+                                                            className="px-4 py-2.5 cursor-pointer hover:bg-foreground/5 dark:hover:bg-foreground/10 text-sm font-medium transition-colors"
+                                                            onClick={() => {
+                                                                form.setValue("country", c);
+                                                                form.clearErrors("country");
+                                                                setCountrySearch("");
+                                                                setIsCountryDropdownOpen(false);
+                                                            }}
+                                                        >
+                                                            {c}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <div className="px-4 py-3 text-sm text-foreground/50 text-center font-medium">Aucun pays trouvé</div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {form.formState.errors.country && <p className="text-red-500 text-xs mt-1">{form.formState.errors.country.message}</p>}
                                 </div>
                                 <div className="space-y-1.5">
                                     <label className="text-sm font-semibold text-foreground/80">Ville</label>

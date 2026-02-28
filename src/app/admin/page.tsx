@@ -114,6 +114,8 @@ export default function AdminDashboard() {
         return matchRole && matchCountry && matchStatus && matchSearch;
     });
 
+    const uniqueCountries = Array.from(new Set(candidates.map(c => c.country))).filter(Boolean).sort();
+
     const handleExportExcel = () => {
         if (filteredCandidates.length === 0) return;
 
@@ -229,14 +231,10 @@ export default function AdminDashboard() {
                                 <option value="Livreur">Livreur</option>
                             </select>
                             <select value={filterCountry} onChange={(e) => setFilterCountry(e.target.value)} className="text-sm border border-zinc-300 dark:border-zinc-700 rounded-md py-1 px-2 bg-transparent">
-                                <option value="Tous">Tous Pays</option>
-                                <option value="Centrafrique">RCA</option>
-                                <option value="Gabon">Gabon</option>
-                                <option value="Tchad">Tchad</option>
-                                <option value="Guinée Conakry">Guinée Conakry</option>
-                                <option value="RDC">RDC</option>
-                                <option value="Burundi">Burundi</option>
-                                <option value="Mauritanie">Mauritanie</option>
+                                <option value="Tous">Tous Pays ({uniqueCountries.length})</option>
+                                {uniqueCountries.map(country => (
+                                    <option key={country} value={country}>{country}</option>
+                                ))}
                             </select>
                             <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="text-sm border border-zinc-300 dark:border-zinc-700 rounded-md py-1 px-2 bg-transparent">
                                 <option value="Tous">Statut</option>
