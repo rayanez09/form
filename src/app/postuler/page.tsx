@@ -153,6 +153,10 @@ export default function PostulerPage() {
         }
 
         try {
+            if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")) {
+                throw new Error("Erreur système : Les clés Supabase (NEXT_PUBLIC_SUPABASE_URL) manquent sur Vercel. Veuillez les ajouter dans les paramètres de votre projet Vercel.");
+            }
+
             const uploadFile = async (fileList: any, bucket: string) => {
                 if (!fileList || fileList.length === 0) return null;
                 const file = fileList[0];
